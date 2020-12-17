@@ -1,0 +1,4 @@
+.child-width > * {
+    float: left;
+    width: 100%;
+}

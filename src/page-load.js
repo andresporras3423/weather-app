@@ -10,7 +10,9 @@ const pageLoad = () => ({
     nameCity : document.createElement("input"),
     labelUnits: document.createElement("label"),
     selectUnit : document.createElement("select"),
+    labelError : document.createElement("label"),
     tempUnits: {'metric': '°C', 'imperial': '°F', 'standard': '°K'},
+    colorParams: ['text-success', 'text-warning', 'text-danger'],
     buttonSearch : document.createElement("button"),
   loadPageContent() {
     const that = this;
@@ -48,6 +50,7 @@ const pageLoad = () => ({
     this.divSearch.appendChild(this.labelUnits);
     this.loadSelectUnit();
     this.divSearch.appendChild(this.buttonSearch);
+    this.divSearch.appendChild(this.labelError);
   },
   loadSelectUnit() {
     const that = this;
@@ -61,30 +64,52 @@ const pageLoad = () => ({
     this.divSearch.appendChild(this.selectUnit);
   },
   getWeather() {
+      let that = this;
+      if(this.nameCity.value===""){
+          this.addLabelErrorColor(1);
+          this.labelError.innerText="City name field cannot be blank";
+          return;
+      }
+      this.labelError.innerText="";
     fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.nameCity.value}&units=${this.selectUnit.value}&callback=test&appid=a71219e79a6b01978ac3a9f3ffccca37`, {
         method: 'get',
         mode: 'cors'
       })
-            .then(response => response.text())
-      .then(json => {   
-        let jsonChars = json.split("");
-        jsonChars = jsonChars.slice(5, jsonChars.length-1).join("");
-        let data = JSON.parse(jsonChars);
-        console.log(data);
-        this.paragraph.innerHTML=`<h3>${this.nameCity.value} weather condition</h3>
-        <p>country code: ${data.sys.country}</p>
-        <p>longitude: ${data.coord.lon} °</p>
-        <p>latitude: ${data.coord.lat} °</p>
-        <p>temperature: ${data.main.temp}${this.tempUnits[this.selectUnit.value]}</p>
-        <p>pressure: ${data.main.pressure} hPa</p>
-        <p>humidity: ${data.main.humidity} %</p>
-        <p>wind speed: ${data.wind.speed} km/h</p>`;
-        this.nameCity.value="";
-        this.selectUnit.value="metric";
+            .then(response => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.text();
+            }
+                )
+      .then(json => {  
+            let jsonChars = json.split("");
+            jsonChars = jsonChars.slice(5, jsonChars.length-1).join("");
+            let data = JSON.parse(jsonChars);
+            console.log(data);
+            this.paragraph.innerHTML=`<h3>${this.nameCity.value} weather condition</h3>
+            <p><strong>country code:</strong> ${data.sys.country}</p>
+            <p><strong>longitude:</strong> ${data.coord.lon} °</p>
+            <p><strong>latitude:</strong> ${data.coord.lat} °</p>
+            <p><strong>temperature:</strong> ${data.main.temp}${this.tempUnits[this.selectUnit.value]}</p>
+            <p><strong>pressure:</strong> ${data.main.pressure} hPa</p>
+            <p><strong>humidity:</strong> ${data.main.humidity} %</p>
+            <p><strong>wind speed:</strong> ${data.wind.speed} km/h</p>`;
+            this.nameCity.value="";
+            this.selectUnit.value="metric";
+            this.addLabelErrorColor(0);
+            this.labelError.innerText="search successfully completed";
         })
     .catch(function(err) {
-      console.log(err);
-    });
+        that.addLabelErrorColor(2);
+        that.labelError.innerText=err;
+      });
+  },
+  addLabelErrorColor(index){
+      for(let i=0; i<this.colorParams.length; i++){
+          if(i===index) this.labelError.classList.add(this.colorParams[i]);
+          else this.labelError.classList.remove(this.colorParams[i]);
+      }
   },
   loadDivShowResult() {
     this.divList.classList.add("col-8");

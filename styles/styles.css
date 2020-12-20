@@ -5,3 +5,14 @@
     margin-bottom:5px;
 }
 
+.black-background{
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color:white;
+    opacity:0.8;
+}
+
+/* .background_image_02d{
+    background-image: url("../images/02d.jpg");
+} */

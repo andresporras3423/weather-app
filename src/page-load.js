@@ -2,6 +2,9 @@ const pageLoad = () => ({
     divContent : document.getElementById("content"),
     hTitle : document.createElement("h2"),
     pExplain : document.createElement("p"),
+    divLeft : document.createElement("div"),
+    divCenter : document.createElement("div"),
+    divRight : document.createElement("div"),
     divList : document.createElement("div"),
     divSearch : document.createElement("div"),
     paragraph : document.createElement("p"),
@@ -24,10 +27,18 @@ const pageLoad = () => ({
     this.pExplain.classList.add("col-12");
     this.pExplain.classList.add("text-center");
     this.pExplain.innerText="Complete the form, search a city by name and choose a temperature unit to get updated information.";
-    this.divContent.appendChild(this.hTitle);
-    this.divContent.appendChild(this.pExplain);
-    this.divContent.appendChild(this.divSearch);
-    this.divContent.appendChild(this.divList);
+    this.divLeft.classList.add("col-2");
+    this.divCenter.classList.add("col-8");
+    this.divCenter.classList.add("row");
+    this.divCenter.classList.add("black-background");
+    this.divRight.classList.add("col-2");
+    this.divCenter.appendChild(this.hTitle);
+    this.divCenter.appendChild(this.pExplain);
+    this.divCenter.appendChild(this.divSearch);
+    this.divCenter.appendChild(this.divList);
+    this.divContent.appendChild(this.divLeft);
+    this.divContent.appendChild(this.divCenter);
+    this.divContent.appendChild(this.divRight);
     this.loadDivShowResult();
     this.loadDivSearchCity();
     this.buttonSearch.onclick=function(){that.getWeather()};
@@ -38,7 +49,7 @@ const pageLoad = () => ({
   },
   loadDivSearchCity() {
     this.divSearch.classList.add("child-width");
-    this.divSearch.classList.add("col-4");
+    this.divSearch.classList.add("col-6");
     this.nameCity.type="text";
     this.headAdd.innerText="Search city";
     this.nameCity.placeholder="City name";
@@ -104,6 +115,7 @@ const pageLoad = () => ({
             <p><strong>pressure:</strong> ${data.main.pressure} hPa</p>
             <p><strong>humidity:</strong> ${data.main.humidity} %</p>
             <p><strong>wind speed:</strong> ${data.wind.speed} km/h</p>`;
+            this.divContent.style=`background-image: url("../images/${data.weather[0].icon}.jpg");`;
             this.nameCity.value="";
             this.selectUnit.value="metric";
             this.addLabelErrorColor(0);
@@ -125,7 +137,7 @@ const pageLoad = () => ({
       }
   },
   loadDivShowResult() {
-    this.divList.classList.add("col-8");
+    this.divList.classList.add("col-6");
     this.paragraph.classList.add("child-width");
     this.divList.appendChild(this.paragraph);
   }

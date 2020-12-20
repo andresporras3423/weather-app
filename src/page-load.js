@@ -14,7 +14,7 @@ const pageLoad = () => ({
     tempUnits: {'metric': '°C', 'imperial': '°F', 'standard': '°K'},
     colorParams: ['text-success', 'text-warning', 'text-danger'],
     buttonSearch : document.createElement("button"),
-  loadPageContent() {
+  async loadPageContent() {
     const that = this;
     this.divContent.classList.add("col-12");
     this.divContent.classList.add("row");
@@ -33,7 +33,8 @@ const pageLoad = () => ({
     this.buttonSearch.onclick=function(){that.getWeather()};
     this.nameCity.value="Miami";
     this.selectUnit.value="metric";
-    this.getWeather();
+    await this.getWeather();
+    this.labelError.innerText="";
   },
   loadDivSearchCity() {
     this.divSearch.classList.add("child-width");
@@ -63,14 +64,19 @@ const pageLoad = () => ({
     });
     this.divSearch.appendChild(this.selectUnit);
   },
-  getWeather() {
-      let that = this;
+  async getWeather() {
       if(this.nameCity.value===""){
           this.addLabelErrorColor(1);
           this.labelError.innerText="City name field cannot be blank";
           return;
       }
       this.labelError.innerText="";
+      await this.getWeatherData();
+      console.log("hello world");
+  },
+  getWeatherData(){
+    return new Promise(resolve => {
+        const that = this;
     fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.nameCity.value}&units=${this.selectUnit.value}&callback=test&appid=a71219e79a6b01978ac3a9f3ffccca37`, {
         method: 'get',
         mode: 'cors'
@@ -88,7 +94,9 @@ const pageLoad = () => ({
             let data = JSON.parse(jsonChars);
             console.log(data);
             this.paragraph.innerHTML=`<h3>${this.nameCity.value} weather condition</h3>
-            <p><img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" width="100" height="100" /></p>
+            <p><img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" width="100" height="100" />
+            <label>${data.weather[0].description}</label>
+            </p>
             <p><strong>country code:</strong> ${data.sys.country}</p>
             <p><strong>longitude:</strong> ${data.coord.lon} °</p>
             <p><strong>latitude:</strong> ${data.coord.lat} °</p>
@@ -100,12 +108,16 @@ const pageLoad = () => ({
             this.selectUnit.value="metric";
             this.addLabelErrorColor(0);
             this.labelError.innerText="search successfully completed";
+            resolve("result");
         })
     .catch(function(err) {
         that.addLabelErrorColor(2);
         that.labelError.innerText=err;
+        resolve("result");
       });
-  },
+    });
+  }
+  ,
   addLabelErrorColor(index){
       for(let i=0; i<this.colorParams.length; i++){
           if(i===index) this.labelError.classList.add(this.colorParams[i]);

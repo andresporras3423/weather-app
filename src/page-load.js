@@ -88,6 +88,7 @@ const pageLoad = () => ({
             let data = JSON.parse(jsonChars);
             console.log(data);
             this.paragraph.innerHTML=`<h3>${this.nameCity.value} weather condition</h3>
+            <p><img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" width="100" height="100" /></p>
             <p><strong>country code:</strong> ${data.sys.country}</p>
             <p><strong>longitude:</strong> ${data.coord.lon} °</p>
             <p><strong>latitude:</strong> ${data.coord.lat} °</p>

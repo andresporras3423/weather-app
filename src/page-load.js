@@ -21,6 +21,7 @@ const pageLoad = () => ({
     const that = this;
     this.divContent.classList.add("col-12");
     this.divContent.classList.add("row");
+    this.divContent.classList.add("content");
     this.hTitle.classList.add("col-12");
     this.hTitle.classList.add("text-center");
     this.hTitle.innerText="WEATHER CONDITION";

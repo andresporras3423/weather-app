@@ -1,7 +1,7 @@
 const weatherApi = () => ({
-  callWeatherApi(nameCity, selectUnit) {
+  callWeatherApi(nameCity) {
     return new Promise(resolve => {
-      fetch(`${window.location.protocol === 'http:' ? 'http' : 'https'}://api.openweathermap.org/data/2.5/weather?q=${nameCity}&units=${selectUnit}&callback=test&appid=a71219e79a6b01978ac3a9f3ffccca37`, {
+      fetch(`${window.location.protocol === 'http:' ? 'http' : 'https'}://api.openweathermap.org/data/2.5/weather?q=${nameCity}&callback=test&appid=a71219e79a6b01978ac3a9f3ffccca37`, {
         method: 'get',
         mode: 'cors',
       })

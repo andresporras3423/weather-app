@@ -14,10 +14,7 @@ const pageLoad = () => ({
   headAdd: document.createElement('h3'),
   labelCity: document.createElement('label'),
   nameCity: document.createElement('input'),
-  labelUnits: document.createElement('label'),
-  selectUnit: document.createElement('select'),
   labelError: document.createElement('label'),
-  tempUnits: { metric: '°C', imperial: '°F', standard: '°K' },
   colorParams: ['text-success', 'text-warning', 'text-danger'],
   buttonSearch: document.createElement('button'),
   async loadPageContent() {
@@ -47,7 +44,6 @@ const pageLoad = () => ({
     this.loadDivSearchCity();
     this.buttonSearch.onclick = () => { that.getWeather(); };
     this.nameCity.value = 'Miami';
-    this.selectUnit.value = 'metric';
     await this.getWeather();
     this.labelError.innerText = '';
   },
@@ -59,25 +55,11 @@ const pageLoad = () => ({
     this.nameCity.placeholder = 'City name';
     this.buttonSearch.innerText = 'Search';
     this.labelCity.innerText = 'City name:';
-    this.labelUnits.innerText = 'Temperature units:';
     this.divSearch.appendChild(this.headAdd);
     this.divSearch.appendChild(this.labelCity);
     this.divSearch.appendChild(this.nameCity);
-    this.divSearch.appendChild(this.labelUnits);
-    this.loadSelectUnit();
     this.divSearch.appendChild(this.buttonSearch);
     this.divSearch.appendChild(this.labelError);
-  },
-  loadSelectUnit() {
-    const that = this;
-    const vals = ['metric', 'imperial', 'standard'];
-    ['Celsius', 'Fahrenheit', 'Kelvin'].forEach((prior, index) => {
-      const opt = document.createElement('option');
-      opt.value = vals[index];
-      opt.innerHTML = prior;
-      that.selectUnit.appendChild(opt);
-    });
-    this.divSearch.appendChild(this.selectUnit);
   },
   async getWeather() {
     if (this.nameCity.value === '') {
@@ -89,8 +71,7 @@ const pageLoad = () => ({
     await this.getWeatherData();
   },
   async getWeatherData() {
-    const result = await this.weatherApi().callWeatherApi(this.nameCity.value,
-      this.selectUnit.value);
+    const result = await this.weatherApi().callWeatherApi(this.nameCity.value);
     if (result.status) {
       const data = result.response;
       this.paragraph.innerHTML = `<h3>${this.nameCity.value} weather condition</h3>
@@ -100,13 +81,28 @@ const pageLoad = () => ({
             <p><strong>country code:</strong> ${data.sys.country}</p>
             <p><strong>longitude:</strong> ${data.coord.lon} °</p>
             <p><strong>latitude:</strong> ${data.coord.lat} °</p>
-            <p><strong>temperature:</strong> ${data.main.temp}${this.tempUnits[this.selectUnit.value]}</p>
+            <p><strong>temperature:</strong> <span id="spanTemp">${(Number(data.main.temp)-273.15).toFixed(2)}</span>
+            <label class="switch">
+  <input type="checkbox" id="toggleTemp" checked>
+  <span class="slider round">
+  <span>C°</span>
+  <span>F°</span>
+  </span>
+  </label></p>
             <p><strong>pressure:</strong> ${data.main.pressure} hPa</p>
             <p><strong>humidity:</strong> ${data.main.humidity} %</p>
             <p><strong>wind speed:</strong> ${data.wind.speed} km/h</p>`;
       document.getElementsByTagName('body')[0].style = `background-image: url("../images/${data.weather[0].icon}.jpg");`;
+      document.getElementById("toggleTemp").onclick= (event) => { 
+        const checked = document.getElementById(event.target.id).checked;
+        if(checked){
+          document.getElementById("spanTemp").innerText = ((Number(document.getElementById("spanTemp").innerText)-32)*(5/9)).toFixed(2);
+        } 
+        else {
+          document.getElementById("spanTemp").innerText = ((Number(document.getElementById("spanTemp").innerText)*1.8)+32).toFixed(2);
+        }
+      };
       this.nameCity.value = '';
-      this.selectUnit.value = 'metric';
       this.addLabelErrorColor(0);
       this.labelError.innerText = 'search successfully completed';
     } else {

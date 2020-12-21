@@ -45,7 +45,7 @@ const pageLoad = () => ({
     this.divContent.appendChild(this.divRight);
     this.loadDivShowResult();
     this.loadDivSearchCity();
-    this.buttonSearch.onclick = function buttonSearchClick() { that.getWeather(); };
+    this.buttonSearch.onclick = () => { that.getWeather(); };
     this.nameCity.value = 'Miami';
     this.selectUnit.value = 'metric';
     await this.getWeather();

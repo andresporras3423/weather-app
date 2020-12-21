@@ -81,7 +81,7 @@ const pageLoad = () => ({
             <p><strong>country code:</strong> ${data.sys.country}</p>
             <p><strong>longitude:</strong> ${data.coord.lon} °</p>
             <p><strong>latitude:</strong> ${data.coord.lat} °</p>
-            <p><strong>temperature:</strong> <span id="spanTemp">${(Number(data.main.temp)-273.15).toFixed(2)}</span>
+            <p><strong>temperature:</strong> <span id="spanTemp">${(Number(data.main.temp) - 273.15).toFixed(2)}</span>
             <label class="switch">
   <input type="checkbox" id="toggleTemp" checked>
   <span class="slider round">
@@ -93,13 +93,12 @@ const pageLoad = () => ({
             <p><strong>humidity:</strong> ${data.main.humidity} %</p>
             <p><strong>wind speed:</strong> ${data.wind.speed} km/h</p>`;
       document.getElementsByTagName('body')[0].style = `background-image: url("../images/${data.weather[0].icon}.jpg");`;
-      document.getElementById("toggleTemp").onclick= (event) => { 
-        const checked = document.getElementById(event.target.id).checked;
-        if(checked){
-          document.getElementById("spanTemp").innerText = ((Number(document.getElementById("spanTemp").innerText)-32)*(5/9)).toFixed(2);
-        } 
-        else {
-          document.getElementById("spanTemp").innerText = ((Number(document.getElementById("spanTemp").innerText)*1.8)+32).toFixed(2);
+      document.getElementById('toggleTemp').onclick = (event) => {
+        const { checked } = document.getElementById(event.target.id);
+        if (checked) {
+          document.getElementById('spanTemp').innerText = ((Number(document.getElementById('spanTemp').innerText) - 32) * (5 / 9)).toFixed(2);
+        } else {
+          document.getElementById('spanTemp').innerText = ((Number(document.getElementById('spanTemp').innerText) * 1.8) + 32).toFixed(2);
         }
       };
       this.nameCity.value = '';

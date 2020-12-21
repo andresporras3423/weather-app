@@ -71,6 +71,7 @@ const pageLoad = () => ({
     await this.getWeatherData();
   },
   async getWeatherData() {
+    const that = this;
     const result = await this.weatherApi().callWeatherApi(this.nameCity.value);
     if (result.status) {
       const data = result.response;
@@ -93,20 +94,21 @@ const pageLoad = () => ({
             <p><strong>humidity:</strong> ${data.main.humidity} %</p>
             <p><strong>wind speed:</strong> ${data.wind.speed} km/h</p>`;
       document.getElementsByTagName('body')[0].style = `background-image: url("../images/${data.weather[0].icon}.jpg");`;
-      document.getElementById('toggleTemp').onclick = (event) => {
-        const { checked } = document.getElementById(event.target.id);
-        if (checked) {
-          document.getElementById('spanTemp').innerText = ((Number(document.getElementById('spanTemp').innerText) - 32) * (5 / 9)).toFixed(2);
-        } else {
-          document.getElementById('spanTemp').innerText = ((Number(document.getElementById('spanTemp').innerText) * 1.8) + 32).toFixed(2);
-        }
-      };
+      document.getElementById('toggleTemp').onclick = (event) => { that.switchTempUnits(event); };
       this.nameCity.value = '';
       this.addLabelErrorColor(0);
       this.labelError.innerText = 'search successfully completed';
     } else {
       this.addLabelErrorColor(2);
       this.labelError.innerText = result.response;
+    }
+  },
+  switchTempUnits(event) {
+    const { checked } = document.getElementById(event.target.id);
+    if (checked) {
+      document.getElementById('spanTemp').innerText = ((Number(document.getElementById('spanTemp').innerText) - 32) * (5 / 9)).toFixed(2);
+    } else {
+      document.getElementById('spanTemp').innerText = ((Number(document.getElementById('spanTemp').innerText) * 1.8) + 32).toFixed(2);
     }
   },
   addLabelErrorColor(index) {

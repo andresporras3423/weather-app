@@ -25,7 +25,7 @@ Fourth JavaScript Microverse Project By Oscar Russi
 
 # Live demo
 
-[Live Demo](https://andresporras3423.github.io/todo-list/dist/index.html)
+[Live Demo](https://andresporras3423.github.io/weather-app/dist/index.html)
 
 
 # How to run this project

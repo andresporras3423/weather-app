@@ -10,7 +10,7 @@ Fourth JavaScript Microverse Project By Oscar Russi
 - You can search for weather condition of any city
 - The index page has a form to search a city for temperature information
 - The output for the search will give a list of related data to the city's weather: temperature, wind speed, pressure, humidity.
-- aside the temperature you have a toggle to switch between celsius (default) and farenheit.
+- aside the temperature you have a toggle to switch between Celsius (default) and Fahrenheit.
 - Output shows an icon to represent the cloud condition of the city, it also updates the background image of the page.
 - The current project uses async methods, promises, and ECMA Script 6
 

@@ -6,12 +6,12 @@ Fourth JavaScript Microverse Project By Oscar Russi
 
 # What it does
 
-- The website was built with JavaScript, Webpack and Open Weather API
+- The website was built with JavaScript, Webpack, and Open Weather API
 - You can search for weather condition of any city
 - The index page has a form to search a city and select unit format for temperature information
 - The output for the search will give a list of related data to the city's weather: temperature, wind speed, pressure, humidity.
-- Output shows an icon to represent the cloud condition of the city, it also update background image of the page.
-- The current project use async methods, promises and ECMA Script 6
+- Output shows an icon to represent the cloud condition of the city, it also updates the background image of the page.
+- The current project uses async methods, promises, and ECMA Script 6
 
 
 # Build with
